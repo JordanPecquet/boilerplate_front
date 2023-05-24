@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { useAtom } from 'jotai';
+import { userAtom } from './atom';
+import Register from './page/register';
+import Login from './page/login';
+// import PostList from './components/PostList';
+import CreatePost from './components/CreatePostButton';
+import Logout from './components/logout';
+import Cookies from 'js-cookie';
 
 function App() {
+  const [user] = useAtom(userAtom);
+  const [, setUser] = useAtom(userAtom);
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    const id = Cookies.get('id');
+
+    if (token) {
+      setUser({
+        id: id,
+        isLoggedIn: true,
+        token: token,
+      });
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Mon application</h1>
+      {user.isLoggedIn ? (
+        <div>
+          <p>Bienvenue, Utilisateur n°{user.id} !</p>
+          {/* <PostList /> */}
+          <CreatePost />
+          <Logout />
+        </div>
+      ) : (
+        <div>
+          <Register />
+          <Login />
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
+
