@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { userAtom } from './atom';
 import Register from './page/register';
 import Login from './page/login';
-// import PostList from './components/PostList';
+import PostList from './components/PostList';
 import CreatePost from './components/CreatePostButton';
 import Logout from './components/logout';
 import Cookies from 'js-cookie';
@@ -31,7 +31,7 @@ function App() {
       {user.isLoggedIn ? (
         <div>
           <p>Bienvenue, Utilisateur n°{user.id} !</p>
-          {/* <PostList /> */}
+          <PostList />
           <CreatePost />
           <Logout />
         </div>

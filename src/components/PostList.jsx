@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function PostList() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch('http://localhost:1337/api/posts');
-        const data = await response.json();
-        setPosts(data.posts);
-        console.log(data.posts)
-      } catch (error) {
-        console.error('Erreur lors de la récupération des publications :', error);
-      }
+    const fetchPosts = () => {
+      fetch("http://localhost:1337/api/posts?populate=*", {
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((responseData) => {
+          setPosts(responseData.data);
+          console.log(responseData.data);
+        });
     };
 
     fetchPosts();
@@ -20,19 +23,17 @@ function PostList() {
 
   return (
     <div>
-      <h2>Liste des publications</h2>
-      {posts.length === 0 ? (
-        <p>Aucune publication pour le moment</p>
-      ) : (
-        posts.map((post) => (
-          <div key={post.id}>
-            <p>{post.text}</p>
-          </div>
-        ))
-      )}
+      <h2>Liste des posts :</h2>
+      {posts.map((post) => (
+        <div key={post.id}>
+          <p>{post.attributes.content}</p>
+          <p>Posté par: {post.attributes.user_id.data.attributes.username}</p>
+        </div>
+      ))}
     </div>
   );
 }
 
 export default PostList;
+
 

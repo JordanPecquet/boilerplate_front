@@ -1,22 +1,21 @@
 import React from 'react';
 import { useAtom } from 'jotai';
 import { userAtom } from '../atom';
+import Cookies from 'js-cookie';
 
 function LogoutButton() {
   const [, setUser] = useAtom(userAtom);
 
   const handleLogout = () => {
-    // Supprimer le token de l'atom user
     setUser({
+      id: '',
       isLoggedIn: false,
       token: '',
     });
 
-    // Supprimer le token des cookies
-    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    Cookies.remove('token');
+    Cookies.remove('id');
 
-    // Supprimer le token du localStorage
-    localStorage.removeItem('token');
   };
 
   return (
@@ -25,3 +24,4 @@ function LogoutButton() {
 }
 
 export default LogoutButton;
+

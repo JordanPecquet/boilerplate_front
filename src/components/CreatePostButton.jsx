@@ -15,8 +15,8 @@ function CreatePostButton() {
 
     const newPost = {
       data: {
-        text: content,
-        user: user.id,
+        content: content,
+        user_id: user.id,
       } 
     };
 

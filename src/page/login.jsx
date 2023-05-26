@@ -28,7 +28,7 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         Cookies.set('token', data.jwt);
         Cookies.set('id', data.user.id);
 
