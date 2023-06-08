@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 
 function Login() {
   const [, setUser] = useAtom(userAtom);
-  const [identifier, setIdentifier] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
@@ -15,21 +15,23 @@ function Login() {
 
     // Effectuer la requête fetch vers le backend Strapi pour l'authentification
     try {
-      const response = await fetch('http://localhost:1337/api/auth/local', {
+      const response = await fetch('http://localhost:3000/users/sign_in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          identifier,
-          password,
+          user: {
+            email: email,
+            password: password
+          }
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
 
-        Cookies.set('token', data.jwt);
+        Cookies.set('token', response.headers.get("Authorization"));
         Cookies.set('id', data.user.id);
 
         setUser({
@@ -50,9 +52,9 @@ function Login() {
         {error && <p>{error}</p>}
         <input
           type="text"
-          placeholder="Identifiant"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
+          placeholder="Adresse email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input

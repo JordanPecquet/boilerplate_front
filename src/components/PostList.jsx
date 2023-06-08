@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 function PostList() {
-  const [posts, setPosts] = useState([]);
+  const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     const fetchPosts = () => {
-      fetch("http://localhost:1337/api/posts?populate=*", {
+      fetch("http://localhost:3000/articles", {
         method: "get",
         headers: {
           "Content-Type": "application/json",
@@ -13,8 +13,8 @@ function PostList() {
       })
         .then((response) => response.json())
         .then((responseData) => {
-          setPosts(responseData.data);
-          console.log(responseData.data);
+          setArticles(responseData);
+          console.log(responseData[2].title);
         });
     };
 
@@ -24,10 +24,10 @@ function PostList() {
   return (
     <div>
       <h2>Liste des posts :</h2>
-      {posts.map((post) => (
-        <div key={post.id}>
-          <p>{post.attributes.content}</p>
-          <p>Posté par: {post.attributes.user_id.data.attributes.username}</p>
+      {articles.map((data) => (
+        <div key={data.id}>
+          <h2>{data.title}</h2>
+          <p>{data.content}</p>
         </div>
       ))}
     </div>

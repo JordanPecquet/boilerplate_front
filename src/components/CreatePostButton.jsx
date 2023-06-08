@@ -3,8 +3,13 @@ import { useAtom } from 'jotai';
 import { userAtom } from '../atom';
 
 function CreatePostButton() {
+  const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [user] = useAtom(userAtom);
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  }
 
   const handleContentChange = (event) => {
     setContent(event.target.value);
@@ -14,14 +19,15 @@ function CreatePostButton() {
     event.preventDefault();
 
     const newPost = {
-      data: {
+      article: {
+        title: title,
         content: content,
         user_id: user.id,
-      } 
+      }
     };
 
     try {
-      const response = await fetch('http://localhost:1337/api/posts', {
+      const response = await fetch('http://localhost:3000/articles', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -44,6 +50,14 @@ function CreatePostButton() {
     <div>
       <h2>Création d'un nouveau post</h2>
       <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="title">Titre :</label>
+          <textarea
+            id="title"
+            value={title}
+            onChange={handleTitleChange}
+          />
+        </div>
         <div>
           <label htmlFor="content">Contenu :</label>
           <textarea

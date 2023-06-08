@@ -6,9 +6,9 @@ import Cookies from 'js-cookie';
 
 function SignupForm() {
   const [, setUser] = useAtom(userAtom);
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [password_confirmation, setPassword_Confirmation] = useState('');
   const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
@@ -16,22 +16,24 @@ function SignupForm() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:1337/api/auth/local/register', {
+      const response = await fetch('http://localhost:3000/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username,
-          email,
-          password,
+          user: {
+            email: email,
+            password: password,
+            password_confirmation: password_confirmation
+          }
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        
-        Cookies.set('token', data.jwt);
+
+        Cookies.set('token', response.headers.get("Authorization"));
         Cookies.set('id', data.user.id);
 
         setUser({
@@ -50,16 +52,6 @@ function SignupForm() {
       <h2>Créer un compte</h2>
       {error && <p>{error}</p>}
       <div>
-        <label htmlFor="username">Nom d'utilisateur :</label>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
-      <div>
         <label htmlFor="email">Email :</label>
         <input
           type="email"
@@ -76,6 +68,16 @@ function SignupForm() {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Confirme ton mot de passe :</label>
+        <input
+          type="password"
+          id="password"
+          value={password_confirmation}
+          onChange={(e) => setPassword_Confirmation(e.target.value)}
           required
         />
       </div>
