@@ -7,6 +7,5 @@ Run
 `npm i`
 &
 `npm start`
--> If any issue when running this command, run `export NODE_OPTIONS=--openssl-legacy-provider` and run again `npm start`
 
 Happy coding!
